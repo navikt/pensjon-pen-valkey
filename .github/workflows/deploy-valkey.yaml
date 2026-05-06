@@ -1,0 +1,65 @@
+name: Build and deploy Valkey
+
+on:
+  push:
+    branches:
+      - "main"
+
+jobs:
+  build:
+    name: "build"
+    permissions:
+      contents: "read"
+      id-token: "write"
+      packages: "write"
+    runs-on: "ubuntu-latest"
+    outputs:
+      image: "${{ steps.docker-push.outputs.image }}"
+      telemetry: "${{ steps.docker-push.outputs.telemetry }}"
+    steps:
+      - uses: "actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd" # ratchet:actions/checkout@v6
+      - uses: nais/docker-build-push@be85229e81c0293c265c646c084f05317fb6e0d2 # ratchet:nais/docker-build-push@v0
+        id: docker-push
+        with:
+          team: teampensjon
+          docker_context: .
+          dockerfile: Dockerfile
+          image_suffix: valkey
+
+  deploy-dev:
+    name: "deploy valkey ${{ matrix.env }}"
+    permissions:
+      contents: "read"
+      id-token: "write"
+    needs: "build"
+    runs-on: "ubuntu-latest"
+    strategy:
+      matrix:
+        env: [q0, q1, q2, q5]
+    steps:
+      - uses: "actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd" # ratchet:actions/checkout@v6
+      - uses: nais/deploy/actions/deploy@2f28259ff29ea37915f5a0c9e2a8e3542c429df7 # ratchet:nais/deploy/actions/deploy@v2
+        name: "deploy"
+        env:
+          CLUSTER: "dev-fss"
+          IMAGE: "${{ needs.build.outputs.image }}"
+          RESOURCE: .nais/valkey-dev.yaml
+          VAR: env=${{ matrix.env }}
+          TELEMETRY: ${{ needs.build.outputs.telemetry }}
+
+  deploy-prod:
+    name: "deploy valkey prod"
+    permissions:
+      contents: "read"
+      id-token: "write"
+    needs: ["build"]
+    runs-on: "ubuntu-latest"
+    steps:
+      - uses: "actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd" # ratchet:actions/checkout@v6
+      - uses: nais/deploy/actions/deploy@2f28259ff29ea37915f5a0c9e2a8e3542c429df7 # ratchet:nais/deploy/actions/deploy@v2
+        name: "deploy"
+        env:
+          CLUSTER: "prod-fss"
+          IMAGE: "${{ needs.build.outputs.image }}"
+          RESOURCE: .nais/valkey-prod.yaml
+          TELEMETRY: ${{ needs.build.outputs.telemetry }}
