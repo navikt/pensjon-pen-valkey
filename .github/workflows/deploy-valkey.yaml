@@ -21,7 +21,7 @@ jobs:
       - uses: nais/docker-build-push@be85229e81c0293c265c646c084f05317fb6e0d2 # ratchet:nais/docker-build-push@v0
         id: docker-push
         with:
-          team: teampensjon
+          team: pensjondeployer
           docker_context: .
           dockerfile: Dockerfile
           image_suffix: valkey
