@@ -18,7 +18,7 @@ jobs:
       telemetry: "${{ steps.docker-push.outputs.telemetry }}"
     steps:
       - uses: "actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10" # ratchet:actions/checkout@v6
-      - uses: nais/docker-build-push@be85229e81c0293c265c646c084f05317fb6e0d2 # ratchet:nais/docker-build-push@v0
+      - uses: nais/docker-build-push@2d2b0a7193e65422b7f0355d4afb445e0a8b2cc3 # ratchet:nais/docker-build-push@v0
         id: docker-push
         with:
           team: pensjondeployer
