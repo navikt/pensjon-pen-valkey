@@ -38,7 +38,7 @@ jobs:
         env: [q0, q1, q2, q5]
     steps:
       - uses: "actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10" # ratchet:actions/checkout@v6
-      - uses: nais/deploy/actions/deploy@823ec9b7e305ce7cf911d0f9a25f7da9d7486cf2 # ratchet:nais/deploy/actions/deploy@v2
+      - uses: nais/deploy/actions/deploy@849e900e3cfa7faf7ad1532bb3a3e6499c932199 # ratchet:nais/deploy/actions/deploy@v2
         name: "deploy"
         env:
           CLUSTER: "dev-fss"
@@ -56,7 +56,7 @@ jobs:
     runs-on: "ubuntu-latest"
     steps:
       - uses: "actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10" # ratchet:actions/checkout@v6
-      - uses: nais/deploy/actions/deploy@823ec9b7e305ce7cf911d0f9a25f7da9d7486cf2 # ratchet:nais/deploy/actions/deploy@v2
+      - uses: nais/deploy/actions/deploy@849e900e3cfa7faf7ad1532bb3a3e6499c932199 # ratchet:nais/deploy/actions/deploy@v2
         name: "deploy"
         env:
           CLUSTER: "prod-fss"
